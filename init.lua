@@ -528,6 +528,9 @@ require('lazy').setup({
           --  the definition of its *type*, not where it was *defined*.
           map('gD', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
 
+          map('gn', vim.diagnostic.goto_next, '[G]oto [N]ext Warning')
+          map('gp', vim.diagnostic.goto_prev, '[G]oto [P]revious Warning')
+
           -- Fuzzy find all the symbols in your current workspace.
           --  Similar to document symbols, except searches over your entire project.
           map('<leader>ly', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
