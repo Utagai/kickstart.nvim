@@ -85,6 +85,18 @@ vim.keymap.set('n', '<leader>bb', ':b#<CR>', { desc = 'Switch to the previous bu
 -- Drop current buffer.
 vim.keymap.set('n', '<leader>bw', ':bw!<CR>', { desc = 'Switch to the previous buffer' })
 
+-- Navigate to first terminal.
+vim.api.nvim_set_keymap('n', '<leader>t', ':lua SwitchToFirstTerminal()<CR>', { noremap = true, silent = true })
+
+function SwitchToFirstTerminal()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.bo[buf].buftype == 'terminal' then
+      vim.api.nvim_set_current_buf(buf)
+      return
+    end
+  end
+end
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
