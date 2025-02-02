@@ -172,7 +172,24 @@ require('lazy').setup({
       'nvim-telescope/telescope.nvim', -- optional
     },
     config = function()
-      vim.keymap.set('n', '<leader>g', require('neogit').open, { desc = 'Open NeoGit' })
+      local function get_git_root()
+        local file = vim.api.nvim_buf_get_name(0) -- Get the current file path
+        local dir = vim.fs.dirname(file) -- Get the file's directory
+        local git_dir = vim.fs.find('.git', { upward = true, stop = vim.loop.os_homedir(), path = dir })[1]
+
+        if git_dir then
+          return vim.fs.dirname(git_dir) -- Get the Git root directory
+        end
+        return nil
+      end
+
+      -- Define keymap to open neogit in the cwd of the current file. This lets me make quick changes to a
+      -- different repo (e.g. kickstart.nvim) without having to restart neovim from a different directory,
+      -- while still working as expected in a 'real' project.
+      vim.keymap.set('n', '<leader>g', function()
+        local git_root_dir = get_git_root()
+        require('neogit').open { cwd = git_root_dir }
+      end, { desc = 'Open NeoGit' })
     end,
   },
 
