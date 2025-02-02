@@ -234,6 +234,7 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>b', group = 'Buffers' },
         { '<leader>l', group = 'Workspace Navigation' },
+        { '<leader>t', group = 'Go To [T]erminal' },
       },
     },
   },
