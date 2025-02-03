@@ -88,6 +88,32 @@ vim.keymap.set('n', '<leader>bw', ':bw!<CR>', { desc = 'Switch to the previous b
 -- Navigate to first terminal.
 vim.api.nvim_set_keymap('n', '<leader>t', ':lua SwitchToFirstTerminal()<CR>', { noremap = true, silent = true })
 
+-- Helper function for finding the git root.
+local function get_git_root()
+  local file = vim.api.nvim_buf_get_name(0) -- Get the current file path
+  local dir = vim.fs.dirname(file) -- Get the file's directory
+  local git_dir = vim.fs.find('.git', { upward = true, stop = vim.loop.os_homedir(), path = dir })[1]
+
+  if git_dir then
+    return vim.fs.dirname(git_dir) -- Get the Git root directory
+  end
+  return nil
+end
+
+-- Define the :SwitchProject command for switching to a new project and changing the working dir.
+vim.api.nvim_create_user_command('SwitchProject', function(opts)
+  local filepath = opts.args
+  vim.cmd('edit ' .. vim.fn.fnameescape(filepath))
+
+  local project_root = get_git_root()
+  if project_root then
+    vim.cmd('cd ' .. vim.fn.fnameescape(project_root))
+    print('Changed directory to project root: ' .. project_root)
+  end
+end, { nargs = 1, complete = 'file' })
+-- Bind it.
+vim.api.nvim_set_keymap('n', '<leader>p', ':SwitchProject ~/code/', { noremap = true, silent = false })
+
 function SwitchToFirstTerminal()
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if vim.bo[buf].buftype == 'terminal' then
@@ -177,17 +203,6 @@ require('lazy').setup({
       'nvim-telescope/telescope.nvim', -- optional
     },
     config = function()
-      local function get_git_root()
-        local file = vim.api.nvim_buf_get_name(0) -- Get the current file path
-        local dir = vim.fs.dirname(file) -- Get the file's directory
-        local git_dir = vim.fs.find('.git', { upward = true, stop = vim.loop.os_homedir(), path = dir })[1]
-
-        if git_dir then
-          return vim.fs.dirname(git_dir) -- Get the Git root directory
-        end
-        return nil
-      end
-
       -- Define keymap to open neogit in the cwd of the current file. This lets me make quick changes to a
       -- different repo (e.g. kickstart.nvim) without having to restart neovim from a different directory,
       -- while still working as expected in a 'real' project.
@@ -239,6 +254,7 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>b', group = 'Buffers' },
         { '<leader>l', group = 'Workspace Navigation' },
+        { '<leader>p', group = 'Switch [P]roject' },
         { '<leader>t', group = 'Go To [T]erminal' },
       },
     },
