@@ -528,7 +528,31 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        rust_analyzer = {},
+        rust_analyzer = {
+          settings = {
+            ['rust-analyzer'] = {
+              imports = {
+                granularity = {
+                  group = 'module',
+                },
+                prefix = 'self',
+              },
+              cargo = {
+                buildScripts = {
+                  enable = true,
+                },
+                targetDir = true,
+                features = 'all',
+              },
+              rustfmt = {
+                extraArgs = { '+nightly' },
+              },
+              procMacro = {
+                enable = true,
+              },
+            },
+          },
+        },
         pylsp = {},
         jsonls = {},
         gopls = {},
