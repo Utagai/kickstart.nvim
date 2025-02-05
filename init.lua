@@ -79,6 +79,10 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+--
+vim.keymap.set('n', '<leader>e', function()
+  vim.diagnostic.open_float(nil, { scope = 'line' })
+end)
 
 -- Go back to prior buffer.
 vim.keymap.set('n', '<leader>bb', ':b#<CR>', { desc = 'Switch to the previous buffer' })
