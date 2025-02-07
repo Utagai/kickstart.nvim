@@ -106,15 +106,21 @@ end
 
 -- Define the :SwitchProject command for switching to a new project and changing the working dir.
 vim.api.nvim_create_user_command('SwitchProject', function(opts)
-  local filepath = opts.args
-  vim.cmd('edit ' .. vim.fn.fnameescape(filepath))
-
-  local project_root = get_git_root()
-  if project_root then
-    vim.cmd('cd ' .. vim.fn.fnameescape(project_root))
-    print('Changed directory to project root: ' .. project_root)
+  local dirpath = opts.args
+  -- Check if the directory contains a .git folder
+  local git_dir = dirpath .. '/.git'
+  if vim.fn.isdirectory(git_dir) == 0 then
+    print 'The specified directory is not a git repository (missing .git folder)'
+    return
   end
-end, { nargs = 1, complete = 'file' })
+  -- Change the working directory
+  vim.cmd('edit ' .. vim.fn.fnameescape(dirpath))
+  vim.cmd('cd ' .. vim.fn.fnameescape(dirpath))
+  print('Changed directory to: ' .. dirpath)
+  -- Run Telescope's find_files
+  local builtin = require 'telescope.builtin'
+  builtin.find_files { cwd = dirpath }
+end, { nargs = 1, complete = 'dir' })
 -- Bind it.
 vim.api.nvim_set_keymap('n', '<leader>p', ':SwitchProject ~/code/', { noremap = true, silent = false })
 
