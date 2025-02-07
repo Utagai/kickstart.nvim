@@ -274,6 +274,7 @@ require('lazy').setup({
       -- Document existing key chains
       spec = {
         { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>e', group = 'Show [E]rror' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>b', group = 'Buffers' },
         { '<leader>l', group = 'Workspace Navigation' },
