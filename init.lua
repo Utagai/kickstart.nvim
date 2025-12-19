@@ -678,6 +678,7 @@ require('lazy').setup({
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
         proto = { 'buf' },
         typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        rust = { 'rustfmt' },
       },
     },
   },
