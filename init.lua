@@ -601,6 +601,10 @@ require('lazy').setup({
               completion = {
                 callSnippet = 'Replace',
               },
+              format = {
+                tab_width = 4,
+                indent_size = 4,
+              },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
               -- diagnostics = { disable = { 'missing-fields' } },
             },
