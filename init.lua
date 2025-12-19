@@ -935,5 +935,10 @@ require('lazy').setup({
   },
 })
 
+vim.api.nvim_create_user_command('Airw', function(opts)
+  local M = require 'airewrite'
+  M.airw(opts, opts.args)
+end, { range = true })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
