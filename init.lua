@@ -583,6 +583,15 @@ require('lazy').setup({
         jsonls = {},
         gopls = {},
         buf_ls = {},
+        clangd = {
+          cmd = {
+            'clangd',
+            '--background-index',
+            '--completion-style=detailed',
+            '--header-insertion=never',
+          },
+          filetypes = { 'c', 'h' },
+        },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -675,10 +684,12 @@ require('lazy').setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd' },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
         proto = { 'buf' },
         typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
         rust = { 'rustfmt' },
+        c = { 'clang-format' },
       },
     },
   },
